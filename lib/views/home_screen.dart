@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:team_app_flutter/Helper/db_helper.dart';
+
+import 'team/team_list.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -6,6 +9,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    DataBaseHelper().db;
+    super.initState();
+  }
+
   Widget menuName(String name) {
     return Container(
       color: Colors.white,
@@ -34,7 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: new Column(
           children: <Widget>[
-            new GestureDetector(onTap: () {}, child: menuName('Team')),
+            new GestureDetector(
+                onTap: () => Navigator.pushNamed(context, TeamListScreen.route),
+                child: menuName('Team')),
             new GestureDetector(onTap: () {}, child: menuName('Employees'))
           ],
         ));
