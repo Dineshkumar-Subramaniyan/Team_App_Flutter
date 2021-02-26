@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:team_app_flutter/Helper/team_provider.dart';
 
 import '../../main.dart';
 import 'team_add_item.dart';
@@ -11,6 +13,7 @@ class TeamListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   
     return Container(
       width: double.infinity,
       margin: EdgeInsets.all(12),
@@ -37,7 +40,11 @@ class TeamListItem extends StatelessWidget {
                             teamname: this.teamname,
                             editMode: EditMode.UPDATE));
                   }),
-              new IconButton(icon: Icon(Icons.delete), onPressed: () {})
+              new IconButton(icon: Icon(Icons.delete), onPressed: () {
+Provider.of<TeamAppProvider>(context,listen:false).deleteTeamCheck(context, teamid,teamname);
+
+
+              })
             ],
           )
         ],

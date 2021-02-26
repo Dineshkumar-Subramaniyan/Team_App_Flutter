@@ -11,7 +11,7 @@ class TeamModel {
 static Map<String, dynamic> toMap(dynamic teamDModel) {
     return {
       'tid': teamDModel._teamid,
-      'tname': teamDModel.tname,
+      'tname': teamDModel._tname,
     };
   }
 

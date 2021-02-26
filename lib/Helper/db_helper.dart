@@ -34,7 +34,7 @@ class DataBaseHelper {
         "CREATE TABLE $employee (empid integer primary key,ename text,age integer,city text,istl bit default 0,tlname text,tlid integer)");
     //Create table team member
     await db.execute(
-        "CREATE TABLE $teammember (tmemid integer primary key,teamid text,tname text,empid int)");
+        "CREATE TABLE $teammember (tmemberid integer primary key,teamid int,tname text,empid int)");
   }
 
   Future<List<Map<String, dynamic>>> getDataFromDB(String tablename) async {
@@ -42,6 +42,13 @@ class DataBaseHelper {
     return db.query(tablename, orderBy: 'teamid desc');
   }
 
+Future <int> getteamid()async{
+   var db = DataBaseHelper._db;
+      db.rawQuery('SELECT last_insert_rowid() as uniqid').then((value){print(value);});
+    print('result');
+    return 5;
+
+}
   Future insertTeamData(Map<String, dynamic> mapData, String tablename) async {
     var db = DataBaseHelper._db;
     return db.insert(tablename, mapData,
@@ -54,5 +61,15 @@ class DataBaseHelper {
         where: 'teamid = ?',
         whereArgs: [mapData['teamid']],
         conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future checkMemberTeam(int teamid)async{
+     var db = DataBaseHelper._db;
+     return db.query(teammember,where: 'teamid = ?',whereArgs: [teamid]);
+  }
+
+  Future delTeamData(int teamid)async{
+     var db = DataBaseHelper._db;
+     return db.delete(team,where: 'teamid = ?',whereArgs: [teamid]);
   }
 }
