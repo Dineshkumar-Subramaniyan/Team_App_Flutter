@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:team_app_flutter/models/team_model.dart';
+import 'package:team_app_flutter/views/team/team_add_item.dart';
 import 'package:team_app_flutter/views/team/team_list_item.dart';
 import 'package:team_app_flutter/Helper/team_provider.dart';
+
+import '../../main.dart';
 
 class TeamListScreen extends StatelessWidget {
   static const route = 'team-list';
 
-  Widget fabWidget() {
-    return FloatingActionButton(onPressed: () {}, child: new Icon(Icons.add));
+  Widget fabWidget(BuildContext ctxt) {
+    return FloatingActionButton(
+        onPressed: () {
+          showDialog(
+              barrierDismissible: false,
+              context: ctxt,
+              builder: (ctxt) => TeamAddItem(editMode: EditMode.ADD));
+        },
+        child: new Icon(Icons.add));
   }
 
   @override
@@ -24,7 +35,7 @@ class TeamListScreen extends StatelessWidget {
             );
           } else {
             if (snapshot.connectionState == ConnectionState.done) {
-              return new Consumer<TeamAppProvider>(
+              return Consumer<TeamAppProvider>(
                   child: new Center(
                     child: Text('No Team Data Exist',
                         style: TextStyle(
@@ -35,14 +46,22 @@ class TeamListScreen extends StatelessWidget {
                   builder: (context, teamAppProvider, child) =>
                       teamAppProvider.teamData.length <= 0
                           ? child
-                          : TeamListItem(
-                              1, "Team name"));
+                          : ListView.builder(
+                              itemCount: teamAppProvider.teamData.length,
+                              itemBuilder: (context, index) {
+                                final tData = TeamModel.toMap(
+                                    teamAppProvider.teamData[index]);
+
+                                return TeamListItem(
+                                    tData['tid'], tData['tname'].toString());
+                              },
+                            ));
             }
           }
           return Container();
         },
       ),
-      floatingActionButton: fabWidget(),
+      floatingActionButton: fabWidget(context),
     );
   }
 }

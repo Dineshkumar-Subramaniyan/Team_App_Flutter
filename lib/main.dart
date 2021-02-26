@@ -8,12 +8,14 @@ void main() {
   runApp(MyApp());
 }
 
+enum EditMode { ADD, UPDATE }
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: TeamAppProvider(),
-          child: MaterialApp(
+      child: MaterialApp(
         title: 'Team App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -21,8 +23,9 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         initialRoute: '/',
-        routes: {'/': (context) => HomeScreen(),
-        TeamListScreen.route:(context)=>TeamListScreen()
+        routes: {
+          '/': (context) => HomeScreen(),
+          TeamListScreen.route: (context) => TeamListScreen(),
         },
       ),
     );

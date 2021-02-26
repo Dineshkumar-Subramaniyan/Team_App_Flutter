@@ -41,4 +41,9 @@ class DataBaseHelper {
     var db = DataBaseHelper._db;
     return db.query(tablename);
   }
+
+  Future insertTeamData(Map<String, dynamic> mapData, String tablename) async {
+    var db = DataBaseHelper._db;
+    return db.insert(tablename, mapData,conflictAlgorithm: ConflictAlgorithm.replace);
+  }
 }
