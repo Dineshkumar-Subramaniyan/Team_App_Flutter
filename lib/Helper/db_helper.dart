@@ -39,11 +39,20 @@ class DataBaseHelper {
 
   Future<List<Map<String, dynamic>>> getDataFromDB(String tablename) async {
     var db = DataBaseHelper._db;
-    return db.query(tablename);
+    return db.query(tablename, orderBy: 'teamid desc');
   }
 
   Future insertTeamData(Map<String, dynamic> mapData, String tablename) async {
     var db = DataBaseHelper._db;
-    return db.insert(tablename, mapData,conflictAlgorithm: ConflictAlgorithm.replace);
+    return db.insert(tablename, mapData,
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future updateTeamData(Map<String, dynamic> mapData, String tablename) async {
+    var db = DataBaseHelper._db;
+    return db.update(tablename, mapData,
+        where: 'teamid = ?',
+        whereArgs: [mapData['teamid']],
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }

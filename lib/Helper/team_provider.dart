@@ -12,7 +12,7 @@ class TeamAppProvider with ChangeNotifier {
 
   Future getTeamData() async {
     final teamlist = await DataBaseHelper().getDataFromDB('team');
-  
+
     tmData = teamlist
         .map((item) => TeamModel(item['teamid'], item['tname']))
         .toList();
@@ -26,8 +26,9 @@ class TeamAppProvider with ChangeNotifier {
       tmData.insert(0, teamval);
       DataBaseHelper().insertTeamData({'tname': tname}, "team");
     } else {
-      tmData[tmData.indexWhere((teamval) => teamval.id == teamid)] =
-          teamval;
+      tmData[tmData.indexWhere((teamval) => teamval.id == teamid)] = teamval;
+      DataBaseHelper()
+          .updateTeamData({'tname': tname, 'teamid': teamid}, "team");
     }
     notifyListeners();
   }

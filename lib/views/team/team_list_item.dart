@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
+import 'team_add_item.dart';
+
 class TeamListItem extends StatelessWidget {
   final int teamid;
   final String teamname;
@@ -11,26 +14,33 @@ class TeamListItem extends StatelessWidget {
     return Container(
       width: double.infinity,
       margin: EdgeInsets.all(12),
-      child: new InkWell(
-        child: new Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            new Expanded(
-              child: new Text(
-                teamname,
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
-              ),
+      child: new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          new Expanded(
+            child: new Text(
+              teamname,
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
             ),
-            new Row(
-              children: [
-                new IconButton(icon: Icon(Icons.edit), onPressed: () {}),
-                new IconButton(icon: Icon(Icons.delete), onPressed: () {})
-              ],
-            )
-          ],
-        ),
-        onTap: () {},
+          ),
+          new Row(
+            children: [
+              new IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (ctxt) => TeamAddItem(
+                            teamid: this.teamid,
+                            teamname: this.teamname,
+                            editMode: EditMode.UPDATE));
+                  }),
+              new IconButton(icon: Icon(Icons.delete), onPressed: () {})
+            ],
+          )
+        ],
       ),
     );
   }
