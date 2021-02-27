@@ -4,7 +4,6 @@ import 'package:team_app_flutter/models/team_model.dart';
 import 'package:team_app_flutter/views/team/team_add_item.dart';
 import 'package:team_app_flutter/views/team/team_list_item.dart';
 import 'package:team_app_flutter/Helper/team_provider.dart';
-
 import '../../main.dart';
 
 class TeamListScreen extends StatelessWidget {

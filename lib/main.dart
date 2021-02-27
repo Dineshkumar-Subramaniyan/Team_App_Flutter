@@ -13,8 +13,11 @@ enum EditMode { ADD, UPDATE }
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: TeamAppProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<TeamAppProvider>(
+        create:(context)=>TeamAppProvider())
+      ],
       child: MaterialApp(
         title: 'Team App',
         debugShowCheckedModeBanner: false,

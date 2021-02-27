@@ -42,11 +42,13 @@ class DataBaseHelper {
     return db.query(tablename, orderBy: 'teamid desc');
   }
 
-Future <int> getteamid()async{
+Future<int> getteamid()async{
    var db = DataBaseHelper._db;
-      db.rawQuery('SELECT last_insert_rowid() as uniqid').then((value){print(value);});
-    print('result');
-    return 5;
+   int uniqindex;
+   await db.rawQuery('SELECT last_insert_rowid() as uniqval').then((value) {
+uniqindex = value[0]['uniqval'];
+    });
+    return uniqindex;
 
 }
   Future insertTeamData(Map<String, dynamic> mapData, String tablename) async {
