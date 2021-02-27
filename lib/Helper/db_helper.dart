@@ -27,30 +27,52 @@ class DataBaseHelper {
 
   Future _onCreate(Database db, int version) async {
     //Create table team
-    await db
-        .execute("CREATE TABLE $team (teamid integer primary key,tname text)");
+    await db.execute(
+        "CREATE TABLE $team (teamid integer primary key autoincrement,tname text)");
 //Create table employee
     await db.execute(
-        "CREATE TABLE $employee (empid integer primary key,ename text,age integer,city text,istl bit default 0,tlname text,tlid integer)");
+        "CREATE TABLE $employee (empid integer primary key autoincrement,ename text,age integer,city text,istl integer default 0,tlname text,tlid integer)");
     //Create table team member
     await db.execute(
-        "CREATE TABLE $teammember (tmemberid integer primary key,teamid int,tname text,empid int)");
+        "CREATE TABLE $teammember (tmemberid integer primary key autoincrement,teamid int,tname text,empid int)");
   }
 
-  Future<List<Map<String, dynamic>>> getDataFromDB(String tablename) async {
+  Future<List<Map<String, dynamic>>> getTeamFromDB() async {
     var db = DataBaseHelper._db;
-    return db.query(tablename, orderBy: 'teamid desc');
+    return db.query(team, orderBy: 'teamid desc');
   }
 
-Future<int> getteamid()async{
-   var db = DataBaseHelper._db;
-   int uniqindex;
-   await db.rawQuery('SELECT last_insert_rowid() as uniqval').then((value) {
-uniqindex = value[0]['uniqval'];
+  Future<String> getTlName(int empid) async {
+    print('emp' + empid.toString());
+    var db = DataBaseHelper._db;
+    String tlname = "";
+    List tlnamelist = await db.query(employee,
+        columns: ['ename'], where: 'empid =?', whereArgs: [empid]);
+    if (tlnamelist != null && tlnamelist.isNotEmpty) {
+      tlname = tlnamelist[0]['ename'];
+    }
+    return tlname;
+  }
+
+  Future<List<Map<String, dynamic>>> getEmpFromDB() async {
+    var db = DataBaseHelper._db;
+    return db.query(employee, orderBy: 'empid desc');
+  }
+
+  Future<List<Map<String, dynamic>>> getTlDataFromDB(String tablename) async {
+    var db = DataBaseHelper._db;
+    return db.query(tablename, where: 'istl =?', whereArgs: [1]);
+  }
+
+  Future<int> getuniqid() async {
+    var db = DataBaseHelper._db;
+    int uniqindex;
+    await db.rawQuery('SELECT last_insert_rowid() as uniqval').then((value) {
+      uniqindex = value[0]['uniqval'];
     });
     return uniqindex;
+  }
 
-}
   Future insertTeamData(Map<String, dynamic> mapData, String tablename) async {
     var db = DataBaseHelper._db;
     return db.insert(tablename, mapData,
@@ -65,13 +87,13 @@ uniqindex = value[0]['uniqval'];
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future checkMemberTeam(int teamid)async{
-     var db = DataBaseHelper._db;
-     return db.query(teammember,where: 'teamid = ?',whereArgs: [teamid]);
+  Future checkMemberTeam(int teamid) async {
+    var db = DataBaseHelper._db;
+    return db.query(teammember, where: 'teamid = ?', whereArgs: [teamid]);
   }
 
-  Future delTeamData(int teamid)async{
-     var db = DataBaseHelper._db;
-     return db.delete(team,where: 'teamid = ?',whereArgs: [teamid]);
+  Future delTeamData(int teamid) async {
+    var db = DataBaseHelper._db;
+    return db.delete(team, where: 'teamid = ?', whereArgs: [teamid]);
   }
 }

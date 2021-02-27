@@ -6,16 +6,18 @@ import 'db_helper.dart';
 
 class TeamAppProvider with ChangeNotifier {
   List tmData = [];
-
+  List<Map<String, dynamic>> listofteam;
   List get teamData {
     return [...tmData];
   }
 
-  Future getTeamData() async {
-    final teamlist = await DataBaseHelper().getDataFromDB('team');
+  Future getData() async {
+    final teamlist = await DataBaseHelper().getTeamFromDB();
+    listofteam = teamlist;
     tmData = teamlist
         .map((item) => TeamModel(item['teamid'], item['tname']))
         .toList();
+
     notifyListeners();
   }
 
@@ -25,7 +27,7 @@ class TeamAppProvider with ChangeNotifier {
     if (EditMode.ADD == editMode) {
       await DataBaseHelper()
           .insertTeamData({'tname': tname}, "team").then((value) async {
-        int _teamid = await DataBaseHelper().getteamid();
+        int _teamid = await DataBaseHelper().getuniqid();
         final tval = TeamModel(_teamid, tname);
         tmData.insert(0, tval);
         notifyListeners();

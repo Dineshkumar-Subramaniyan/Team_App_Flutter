@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
+import 'emp_add_item.dart';
+
 class EmpListItem extends StatelessWidget {
   final Map<String, dynamic> empDataMap;
   EmpListItem(this.empDataMap);
   final List<Map<String, dynamic>> teamData = [
     {'tname': 'Team1'},
     {'tname': 'Team2'},
-    {'tname': 'Team1'},
-    {'tname': 'Team2'},
-    {'tname': 'Team1'},
-    {'tname': 'Team2'}
+    {'tname': 'Team1'}
   ];
 
   List<Widget> buildchip() {
@@ -25,7 +25,7 @@ class EmpListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.all(5),
+      margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(6),
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -40,7 +40,16 @@ class EmpListItem extends StatelessWidget {
                 ),
               ),
               new Row(children: [
-                new IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+                new IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      print(this.empDataMap.toString());
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EmpAddItem(EditMode.UPDATE,
+                                  empDatamap: this.empDataMap)));
+                    }),
                 new IconButton(icon: Icon(Icons.delete), onPressed: () {})
               ]),
             ],
@@ -58,18 +67,17 @@ class EmpListItem extends StatelessWidget {
                       'City : ' + this.empDataMap['city'].toString() ?? ''))
             ],
           ),
-         
-          this.empDataMap['istl']!=null && this.empDataMap['istl']!=1 ?
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: new Text('Team Lead : '+ this.empDataMap['tlname'].toString()),
-          )
-          :new Container(),
-
+          this.empDataMap['istl'] != null && this.empDataMap['istl'] != 1
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: new Text(
+                      'Team Lead : ' + this.empDataMap['tlname'].toString()),
+                )
+              : new Container(),
           SizedBox(height: 2),
           Wrap(
             alignment: WrapAlignment.start,
-            spacing: 10,
+            spacing: 6,
             children: buildchip(),
           ),
         ],

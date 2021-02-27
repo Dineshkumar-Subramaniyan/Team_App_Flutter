@@ -1,37 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_app_flutter/Helper/team_provider.dart';
-import 'package:team_app_flutter/views/team/team_list.dart';
 import '../../main.dart';
 
 class TeamAddItem extends StatefulWidget {
   final int teamid;
   final String teamname;
   final EditMode editMode;
+
   TeamAddItem({this.teamid, this.teamname, this.editMode});
   @override
   _TeamAddItemState createState() =>
-      _TeamAddItemState(teamid, teamname, editMode);
+      _TeamAddItemState();
 }
 
 class _TeamAddItemState extends State<TeamAddItem> {
   final TextEditingController teamtextController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  int _teamid;
-  String _teamname;
-  EditMode _editMode;
-
-  _TeamAddItemState(teamid, teamname, editMode) {
-    this._teamid = teamid;
-    this._teamname = teamname;
-    this._editMode = editMode;
-  }
 
   @override
   void initState() {
-    if (EditMode.UPDATE == _editMode) {
-      teamtextController.text = _teamname;
+    if (EditMode.UPDATE == widget.editMode) {
+      teamtextController.text = widget.teamname;
     }
     super.initState();
   }
@@ -58,7 +49,7 @@ class _TeamAddItemState extends State<TeamAddItem> {
     final formVal = _formKey.currentState.validate();
     if (formVal) {
       Provider.of<TeamAppProvider>(context, listen: false)
-          .addUpdateTeam(_teamid, teamtextController.text.trim(), _editMode);
+          .addUpdateTeam(widget.teamid, teamtextController.text.trim(), widget.editMode);
       Navigator.pop(context);
     }
     _formKey.currentState.save();
