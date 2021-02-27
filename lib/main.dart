@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:team_app_flutter/views/employee/emp_list.dart';
 import 'package:team_app_flutter/Helper/team_provider.dart';
 import 'package:team_app_flutter/views/team/team_list.dart';
 import 'views/home_screen.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => HomeScreen(),
           TeamListScreen.route: (context) => TeamListScreen(),
+          EmpListScreen.route:(context) =>EmpListScreen()
         },
       ),
     );

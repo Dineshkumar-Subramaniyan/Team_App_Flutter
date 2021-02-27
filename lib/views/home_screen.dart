@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team_app_flutter/Helper/db_helper.dart';
-
+import 'package:team_app_flutter/views/employee/emp_list.dart';
 import 'team/team_list.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
             new GestureDetector(
                 onTap: () => Navigator.pushNamed(context, TeamListScreen.route),
                 child: menuName('Team')),
-            new GestureDetector(onTap: () {}, child: menuName('Employees'))
+            new GestureDetector(onTap: ()  => Navigator.pushNamed(context, EmpListScreen.route), child: menuName('Employees'))
           ],
         ));
   }

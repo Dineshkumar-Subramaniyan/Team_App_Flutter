@@ -13,9 +13,9 @@ class TeamListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
     return Container(
       width: double.infinity,
+      color: Colors.white,
       margin: EdgeInsets.all(12),
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -40,11 +40,12 @@ class TeamListItem extends StatelessWidget {
                             teamname: this.teamname,
                             editMode: EditMode.UPDATE));
                   }),
-              new IconButton(icon: Icon(Icons.delete), onPressed: () {
-Provider.of<TeamAppProvider>(context,listen:false).deleteTeamCheck(context, teamid,teamname);
-
-
-              })
+              new IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    Provider.of<TeamAppProvider>(context, listen: false)
+                        .deleteTeamCheck(context, teamid, teamname);
+                  })
             ],
           )
         ],

@@ -23,6 +23,7 @@ class TeamListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+        backgroundColor: Colors.white.withOpacity(0.98),
       appBar: new AppBar(title: Text('Team Names')),
       body: FutureBuilder(
         future:
