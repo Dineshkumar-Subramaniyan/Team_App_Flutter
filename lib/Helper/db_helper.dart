@@ -43,7 +43,6 @@ class DataBaseHelper {
   }
 
   Future<String> getTlName(int empid) async {
-    print('emp' + empid.toString());
     var db = DataBaseHelper._db;
     String tlname = "";
     List tlnamelist = await db.query(employee,
@@ -52,6 +51,17 @@ class DataBaseHelper {
       tlname = tlnamelist[0]['ename'];
     }
     return tlname;
+  }
+
+  Future<String> getTeamName(int teamid) async {
+    var db = DataBaseHelper._db;
+    String teamname = "";
+    List tnamelist = await db.query(team,
+        columns: ['tname'], where: 'teamid =?', whereArgs: [teamid]);
+    if (tnamelist != null && tnamelist.isNotEmpty) {
+      teamname = tnamelist[0]['tname'];
+    }
+    return teamname;
   }
 
   Future<List<Map<String, dynamic>>> getEmpFromDB() async {
@@ -87,6 +97,14 @@ class DataBaseHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  Future updateEmpData(Map<String, dynamic> mapData, String tablename) async {
+    var db = DataBaseHelper._db;
+    return db.update(tablename, mapData,
+        where: 'empid = ?',
+        whereArgs: [mapData['empid']],
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
   Future checkMemberTeam(int teamid) async {
     var db = DataBaseHelper._db;
     return db.query(teammember, where: 'teamid = ?', whereArgs: [teamid]);
@@ -95,5 +113,26 @@ class DataBaseHelper {
   Future delTeamData(int teamid) async {
     var db = DataBaseHelper._db;
     return db.delete(team, where: 'teamid = ?', whereArgs: [teamid]);
+  }
+
+  addupdtmmem(int empid, int teamid, int index) async {
+    var db = DataBaseHelper._db;
+    Map<String, dynamic> mapData = new Map<String, dynamic>();
+    mapData['teamid'] = teamid;
+    mapData['empid'] = empid;
+    mapData['tname'] = await getTeamName(teamid);
+    if (index == 0) {
+      db.delete(teammember, where: 'empid = ?', whereArgs: [empid]);
+    }
+    db.insert(teammember, mapData,
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<List<Map<String, dynamic>>> getTeammembr(int empid) async {
+    var db = DataBaseHelper._db;
+
+    List<Map<String, dynamic>> dataMap =
+        await db.query(teammember, where: 'empid =?', whereArgs: [empid]);
+    return dataMap;
   }
 }

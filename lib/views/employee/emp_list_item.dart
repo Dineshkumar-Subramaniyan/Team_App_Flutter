@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:team_app_flutter/Helper/db_helper.dart';
+import 'package:team_app_flutter/Helper/switch_provider.dart';
 import '../../main.dart';
 import 'emp_add_item.dart';
 
 class EmpListItem extends StatelessWidget {
   final Map<String, dynamic> empDataMap;
   EmpListItem(this.empDataMap);
-  final List<Map<String, dynamic>> teamData = [
-    {'tname': 'Team1'},
-    {'tname': 'Team2'},
-    {'tname': 'Team1'}
-  ];
 
-  List<Widget> buildchip() {
+  List<Widget> buildchip(List<Map<String, dynamic>> _teamData) {
     List<Widget> chip;
-    chip = this
-        .teamData
-        .map((mapData) => Chip(label: new Text(mapData['tname'])))
-        .toList();
+    if (_teamData != null && _teamData.isNotEmpty) {
+      chip = _teamData
+          .map((mapData) => Chip(label: new Text(mapData['tname'])))
+          .toList();
+    } else {
+      chip = List<Widget>();
+    }
     return chip;
   }
 
@@ -25,8 +25,8 @@ class EmpListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(6),
+      margin: EdgeInsets.all(8),
+      padding: EdgeInsets.all(4),
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,14 +43,17 @@ class EmpListItem extends StatelessWidget {
                 new IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
-                      print(this.empDataMap.toString());
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => EmpAddItem(EditMode.UPDATE,
                                   empDatamap: this.empDataMap)));
                     }),
-                new IconButton(icon: Icon(Icons.delete), onPressed: () {})
+                new IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      print(this.empDataMap.toString());
+                    })
               ]),
             ],
           ),
@@ -75,10 +78,18 @@ class EmpListItem extends StatelessWidget {
                 )
               : new Container(),
           SizedBox(height: 2),
-          Wrap(
-            alignment: WrapAlignment.start,
-            spacing: 6,
-            children: buildchip(),
+          FutureBuilder(
+            future: DataBaseHelper().getTeammembr(this.empDataMap['empid']),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Wrap(
+                  alignment: WrapAlignment.start,
+                  spacing: 4,
+                  children: buildchip(snapshot.data),
+                );
+              }
+              return SizedBox(height: 50);
+            },
           ),
         ],
       ),

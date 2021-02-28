@@ -18,10 +18,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<TeamAppProvider>(
-        create:(context)=>TeamAppProvider()),
-ChangeNotifierProvider<SwitchProvider>(
-        create:(context)=>SwitchProvider()),
-        
+            create: (context) => TeamAppProvider()),
+        ChangeNotifierProvider<EmpProvider>(create: (context) => EmpProvider()),
       ],
       child: MaterialApp(
         title: 'Team App',
@@ -34,8 +32,7 @@ ChangeNotifierProvider<SwitchProvider>(
         routes: {
           '/': (context) => HomeScreen(),
           TeamListScreen.route: (context) => TeamListScreen(),
-          EmpListScreen.route:(context) =>EmpListScreen(),
-          
+          EmpListScreen.route: (context) => EmpListScreen(),
         },
       ),
     );
