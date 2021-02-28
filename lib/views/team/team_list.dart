@@ -23,8 +23,8 @@ class TeamListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.98),
-      appBar: new AppBar(title: Text('Team Names')),
+       backgroundColor: Colors.white.withOpacity(0.9),
+      appBar: new AppBar(title: Text('Team Names'),centerTitle: true),
       body: FutureBuilder(
         future: Provider.of<TeamAppProvider>(context, listen: false).getData(),
         builder: (BuildContext context, snapshot) {
@@ -36,7 +36,7 @@ class TeamListScreen extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               return Consumer<TeamAppProvider>(
                   child: new Center(
-                    child: Text('No Team Data Exist',
+                    child: Text('No Team Added',
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 18,

@@ -14,9 +14,10 @@ class TeamListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      color: Colors.white,
-      margin: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(5)),
+      margin: EdgeInsets.all(8),
+      padding: EdgeInsets.all(5),
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

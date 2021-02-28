@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:team_app_flutter/main.dart';
 import 'package:team_app_flutter/models/emp_model.dart';
 import 'db_helper.dart';
@@ -11,9 +12,10 @@ class EmpProvider extends ChangeNotifier {
     return [...empData];
   }
 
-  Future getEmpTLData() async {
-    final empTllist = await DataBaseHelper().getTlDataFromDB('employee');
-
+  Future getEmpTLData({int empid}) async {
+    
+    final empTllist = await DataBaseHelper().getTlDataFromDB('employee', empid);
+    
     try {
       empTlData = empTllist
           .map((item) => EmpModel(item['ename'], item['age'], item['city'],
@@ -28,7 +30,7 @@ class EmpProvider extends ChangeNotifier {
 
   Future getEmpData() async {
     final emplist = await DataBaseHelper().getEmpFromDB();
-  
+    
     try {
       empData = emplist
           .map((item) => EmpModel(item['ename'], item['age'], item['city'],
@@ -43,7 +45,7 @@ class EmpProvider extends ChangeNotifier {
   }
 
   getEmpId(int empid) {
-    print(empid);
+    
     return empData.firstWhere((item) => item.empid == empid,
         orElse: () => null);
   }
@@ -66,7 +68,6 @@ class EmpProvider extends ChangeNotifier {
           .then((value) async {
         int _empid = await DataBaseHelper().getuniqid();
         await addteammembr(_empid, selteamid);
-
         try {
           final tmval = EmpModel(
             name,
@@ -91,11 +92,26 @@ class EmpProvider extends ChangeNotifier {
     }
   }
 
-  addteammembr(int empid, List<int> selectedTeams) {
+  addteammembr(int empid, List<int> selectedTeams) async {
     if (empid != null && selectedTeams != null && selectedTeams.isNotEmpty) {
       for (var i = 0; i < selectedTeams.length; i++) {
-        DataBaseHelper().addupdtmmem(empid, selectedTeams[i], i);
+        await DataBaseHelper().addupdtmmem(empid, selectedTeams[i], i);
       }
+    }
+  }
+
+  Future deleteEmpCheck(BuildContext context, int empid, String ename) async {
+    final checTlRole = await DataBaseHelper().checkTlRole(empid);
+    if (checTlRole != null && checTlRole.isNotEmpty) {
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+            content: Text(
+                '${checTlRole.length} employee are assigned under the $ename TL')));
+    } else {
+      empData.removeWhere((tmval) => tmval.empid == empid);
+      notifyListeners();
+      DataBaseHelper().delEmpData(empid);
     }
   }
 }

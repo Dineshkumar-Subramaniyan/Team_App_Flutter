@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:team_app_flutter/Helper/switch_provider.dart';
+import 'package:team_app_flutter/Helper/employee_provider.dart';
 import 'package:team_app_flutter/main.dart';
 import 'package:team_app_flutter/views/employee/emp_list_item.dart';
 import 'emp_add_item.dart';
@@ -25,10 +25,9 @@ class EmpListScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
       floatingActionButton: fabWidget(context),
-      appBar: AppBar(title: Text("Employee Names")),
+      appBar: AppBar(title: Text("Employee Names"), centerTitle: true),
       body: FutureBuilder(
-        future:
-            Provider.of<EmpProvider>(context, listen: false).getEmpData(),
+        future: Provider.of<EmpProvider>(context, listen: false).getEmpData(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return new Center(
@@ -38,7 +37,7 @@ class EmpListScreen extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               return Consumer<EmpProvider>(
                 child: new Center(
-                  child: Text('No Employee Data Exist',
+                  child: Text('No Employee Added',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 18,
@@ -52,7 +51,7 @@ class EmpListScreen extends StatelessWidget {
                             itemBuilder: (context, index) {
                               final empData =
                                   EmpModel.toMap(empProvider.empData[index]);
-                                  
+
                               return EmpListItem(empData);
                             }),
               );

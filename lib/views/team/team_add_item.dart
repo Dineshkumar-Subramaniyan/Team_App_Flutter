@@ -10,14 +10,12 @@ class TeamAddItem extends StatefulWidget {
 
   TeamAddItem({this.teamid, this.teamname, this.editMode});
   @override
-  _TeamAddItemState createState() =>
-      _TeamAddItemState();
+  _TeamAddItemState createState() => _TeamAddItemState();
 }
 
 class _TeamAddItemState extends State<TeamAddItem> {
   final TextEditingController teamtextController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
 
   @override
   void initState() {
@@ -48,8 +46,8 @@ class _TeamAddItemState extends State<TeamAddItem> {
   void saveAction(context) {
     final formVal = _formKey.currentState.validate();
     if (formVal) {
-      Provider.of<TeamAppProvider>(context, listen: false)
-          .addUpdateTeam(widget.teamid, teamtextController.text.trim(), widget.editMode);
+      Provider.of<TeamAppProvider>(context, listen: false).addUpdateTeam(
+          widget.teamid, teamtextController.text.trim(), widget.editMode);
       Navigator.pop(context);
     }
     _formKey.currentState.save();
@@ -64,12 +62,10 @@ class _TeamAddItemState extends State<TeamAddItem> {
         child: new TextFormField(
           controller: teamtextController,
           validator: (val) {
-            if (val.isEmpty) {
+            if (val.trim().isEmpty) {
               return "Please enter data";
-            } else if (val.length <= 1) {
-              return "Enter minimum 2 character";
-            } else if (val.length > 15) {
-              return "Name should not exceed limit";
+            } else if (val.trim().length <= 1 || val.trim().length > 15) {
+              return "Name should be 2-15 characters";
             } else
               return null;
           },
@@ -87,6 +83,11 @@ class _TeamAddItemState extends State<TeamAddItem> {
         new InkWell(
           child: actionWidget('Save'),
           onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
             saveAction(context);
           },
         )

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_app_flutter/Helper/db_helper.dart';
-import 'package:team_app_flutter/Helper/switch_provider.dart';
+import 'package:team_app_flutter/Helper/employee_provider.dart';
 import '../../main.dart';
 import 'emp_add_item.dart';
 
@@ -16,7 +16,7 @@ class EmpListItem extends StatelessWidget {
           .map((mapData) => Chip(label: new Text(mapData['tname'])))
           .toList();
     } else {
-      chip = List<Widget>();
+      chip = [SizedBox(height: 50)];
     }
     return chip;
   }
@@ -24,9 +24,10 @@ class EmpListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(5)),
       margin: EdgeInsets.all(8),
-      padding: EdgeInsets.all(4),
+      padding: EdgeInsets.all(5),
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +53,9 @@ class EmpListItem extends StatelessWidget {
                 new IconButton(
                     icon: Icon(Icons.delete),
                     onPressed: () {
-                      print(this.empDataMap.toString());
+                      Provider.of<EmpProvider>(context, listen: false)
+                          .deleteEmpCheck(context, empDataMap['empid'],
+                              empDataMap['ename']);
                     })
               ]),
             ],
